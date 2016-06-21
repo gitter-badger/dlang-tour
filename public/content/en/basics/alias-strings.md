@@ -12,11 +12,11 @@ its content will never change again. And actually this is the second
 introduction: welcome UTF-8 `string`!
 
 Due to their immutablility `string`s can perfectly be shared among
-different threads. Being a slice parts can be taken out of it without
+different threads. As `string` is a slice, parts can be taken out of it without
 allocating memory. The standard function `std.algorithm.splitter`
 for example splits a string by newline without any memory allocations.
 
-Beside the UTF-8 `string` there are two more:
+Beside the UTF-8 `string` there are two more types:
 
     alias wstring = immutable(dchar)[]; // UTF-16
     alias dstring = immutable(wchar)[]; // UTF-32
@@ -27,10 +27,15 @@ the `to` method from `std.conv`:
     dstring myDstring = to!dstring(myString);
     string myString = to!string(myDstring);
 
-Because `string`s are arrays the same operations apply to them
+Since `string`s are arrays the same operations apply to them
 e.g. strings might be concatenated using the `~` operator for example.
-The property `.length` isn't necessarily the number of characters
-for UTF strings so in that case use the function `std.utf.count`.
+For non-ASCII strings can use more than one byte per character,
+hence for example the property `.length` does not yield the
+number of character for UTF strings.
+For UTF strings `std.utf.count` needs to be used.
+[`std.utf`](http://dlang.org/phobos/std_utf.html) provides further
+methods that help dealing with decoding UTF strings. Unicode algorithms
+can utilize [`std.uni`](http://dlang.org/phobos/std_uni.html).
 
 To create multi-line strings use the
 `string str = q{ ... }` syntax. For raw strings you can either use
@@ -41,6 +46,8 @@ or the r-prefix `r"string that "doesn't" need to be escaped"`.
 
 - [Characters in _Programming in D_](http://ddili.org/ders/d.en/characters.html)
 - [Strings in _Programming in D_](http://ddili.org/ders/d.en/strings.html)
+- [std.utf](http://dlang.org/phobos/std_utf.html) - UTF en-/decoding algorithms
+- [std.uni](http://dlang.org/phobos/std_uni.html - Unicode algorithms
 
 ## {SourceCode}
 
